@@ -81,7 +81,7 @@ class FirefoxWebdriver:
 
         options = FirefoxOptions()
         options.binary_location = retrieve_firefox_binary_path_based_on_os(settings.web_driver.firefox_binary)
-        # options.add_argument('--headless')
+        options.add_argument('--headless')
         # options.add_argument("-private")  # Firefox incognito mode
         options.add_argument('--new_instance')
         for item in settings.web_driver.firefox.options:

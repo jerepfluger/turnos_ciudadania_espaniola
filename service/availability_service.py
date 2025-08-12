@@ -1,11 +1,13 @@
 import time
 
 from config.config import settings as config_file
+from constants.notifications.common import TELEGRAM
 from helpers.decorators import retry_on_exceptions
 from helpers.logger import logger
 from helpers.webdriver.find_element import find_element_by_xpath_and_click_it_with_javascript, \
     find_element_by_id_and_click_it_with_javascript, find_element
 from helpers.webdriver.waits import wait_presence_of_element_located
+from service.notifications_service import NotificationsService
 from webdrivers.webdriver import WebDriver
 
 
@@ -48,11 +50,11 @@ class SpanishCitizenshipService:
         wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idListServices')
         logger.info('Checking if there\'s any available service')
         services_list = find_element(self.driver, 'ID', 'idListServices')
-        if not services_list.text:
-            return
+        # if services_list.text:
+        #     return
 
         logger.info('Apparently there are available services. Notifying on Telegram')
-
+        NotificationsService().post_notification(TELEGRAM, "@jerepfluger aparentemente hay turnos")
 
     def close_driver(self):
         if self.driver:

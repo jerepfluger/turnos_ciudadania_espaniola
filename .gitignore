@@ -1,0 +1,9 @@
+__pycache__
+.DS_Store
+.idea
+cita_previa/venv
+screenshots
+*.pyc
+*.secrets
+*.env
+geckodriver.log

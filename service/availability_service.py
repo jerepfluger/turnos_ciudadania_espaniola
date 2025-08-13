@@ -57,9 +57,9 @@ class SpanishCitizenshipService:
         #     return
 
         logger.info('Apparently there are available services. Notifying on Telegram')
-        NotificationsService().post_notification(TELEGRAM, "@jerepfluger aparentemente hay turnos")
-        NotificationsService().post_notification(TELEGRAM, "@+34645692096 aparentemente hay turnos")
-        NotificationsService().post_notification(TELEGRAM, "@+376620214 aparentemente hay turnos")
+        # NotificationsService().post_notification(TELEGRAM, "@jerepfluger aparentemente hay turnos")
+        # NotificationsService().post_notification(TELEGRAM, "@+34645692096 aparentemente hay turnos")
+        # NotificationsService().post_notification(TELEGRAM, "@+376620214 aparentemente hay turnos")
 
         logger.info('Saving screenshot and html_source code')
         self.save_screenshot_and_html_source_code()

@@ -42,13 +42,14 @@ class SpanishCitizenshipService:
         find_element_by_xpath_and_click_it_with_javascript(self.driver, './/*[contains(text(), "AQUÍ")]')
 
         logger.info('Waiting 10 seconds to accept popup')
-        time.sleep(10)
+        time.sleep(15)
         self.driver.switch_to.alert.accept()
 
         logger.info('Waiting for appointments page to be fully loaded')
         wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idCaptchaButton')
         find_element_by_id_and_click_it_with_javascript(self.driver, 'idCaptchaButton')
 
+        time.sleep(15)
         wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idListServices')
         logger.info('Checking if there\'s any available service')
         services_list = find_element(self.driver, 'ID', 'idListServices')

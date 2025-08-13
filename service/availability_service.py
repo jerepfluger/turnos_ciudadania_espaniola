@@ -41,7 +41,7 @@ class SpanishCitizenshipService:
         logger.info('Page loaded. Click on AQUI button to check availability process')
         find_element_by_xpath_and_click_it_with_javascript(self.driver, './/*[contains(text(), "AQUÍ")]')
 
-        logger.info('Waiting 10 seconds to accept popup')
+        logger.info('Waiting 15 seconds to accept popup')
         time.sleep(15)
         self.driver.switch_to.alert.accept()
 
@@ -53,14 +53,14 @@ class SpanishCitizenshipService:
         wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idListServices')
         logger.info('Checking if there\'s any available service')
         services_list = find_element(self.driver, 'ID', 'idListServices')
-        # if not services_list.text:
-        #     logger.info('No available appointments found')
-        #     return
+        if not services_list.text:
+            logger.info('No available appointments found')
+            return
 
         logger.info('Apparently there are available services. Notifying on Telegram')
-        # NotificationsService().post_notification(TELEGRAM, "@jerepfluger aparentemente hay turnos")
-        # NotificationsService().post_notification(TELEGRAM, "@+34645692096 aparentemente hay turnos")
-        # NotificationsService().post_notification(TELEGRAM, "@+376620214 aparentemente hay turnos")
+        NotificationsService().post_notification(TELEGRAM, "@jerepfluger aparentemente hay turnos")
+        NotificationsService().post_notification(TELEGRAM, "@+34645692096 aparentemente hay turnos")
+        NotificationsService().post_notification(TELEGRAM, "@+376620214 aparentemente hay turnos")
 
         logger.info('Saving screenshot and html_source code')
         self.save_screenshot_and_html_source_code()

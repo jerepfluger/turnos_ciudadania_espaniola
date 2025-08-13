@@ -17,8 +17,6 @@ jobs:
     steps:
       - name: Checkot main branch
         uses: actions/checkout@v3
-        with:
-          ref: feature/TCE-3-upload-screeenshot-html-code-on-success
 
       - name: Set up Python
         uses: actions/setup-python@v4

@@ -3,6 +3,7 @@ name: Run availability check
 on:
   schedule:
     - cron: '0,10,20,30,40,50 * * * *'  # Every day every 10 minutes
+
   workflow_dispatch:                    # allows manual trigger from the GitHub UI
 
 jobs:

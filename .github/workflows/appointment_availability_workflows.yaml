@@ -2,7 +2,7 @@ name: Run availability check
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Every day every 10 minutes
+    - cron: '0,10,20,30,40,50 * * * *'  # Every day every 10 minutes
   workflow_dispatch:                    # allows manual trigger from the GitHub UI
 
 jobs:
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkot main branch
         uses: actions/checkout@v3
+        with:
+          ref: feature/TCE-3-upload-screeenshot-html-code-on-success
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -31,4 +33,12 @@ jobs:
 
       - name: Run api
         run: |
+          mkdir -p debug  # Ensure debug folder exists before running script 
           python api.py
+
+      - name: Upload debug artifacts if any
+        if: ${{ hashFiles('debug/**') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-debug
+          path: debug/**

@@ -1,5 +1,5 @@
 api:
-  name: "bookin report"
+  name: "Spanish Citizenship Availability Checker"
   port: 9291
 context: "local"
 

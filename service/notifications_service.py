@@ -15,7 +15,7 @@ class NotificationsService:
     def __init__(self):
         self.telegram_url = "https://api.telegram.org/bot{token}/sendMessage"
 
-    def post_notification(self, user, tag):
+    def post_notification(self, user, message):
         logger.info(f"Sending Telegram message")
         telegram_token = build_telegram_token_and_channel_id()
         chat_id = get_chat_id_by_user(user)
@@ -23,7 +23,7 @@ class NotificationsService:
 
         payload = {
             "chat_id": chat_id,
-            "text": f"{tag} Hay nuevos turnos para la ciudadania! Rápido!",
+            "text": message,
             "parse_mode": "Markdown"
         }
         response = requests.post(url, data=payload)

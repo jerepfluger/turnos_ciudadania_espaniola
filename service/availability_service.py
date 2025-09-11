@@ -108,6 +108,6 @@ def notify_users_of_appointments_availability():
     for user in enabled_users:
         try:
             tag = os.getenv(f'{user.upper()}_TAG', '') or env.get(f'{user.upper()}_TAG', '')
-            NotificationsService().post_notification(user, tag)
+            NotificationsService().post_notification(user, f"{tag} Hay nuevos turnos para la ciudadania! Rápido! https://www.exteriores.gob.es/Consulados/cordoba/es/Comunicacion/Noticias/Paginas/Articulos/Instrucciones-para-solicitar-cita-previa-para-LMD.aspx")
         except Exception as ex:
             logger.error(ex)

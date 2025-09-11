@@ -85,7 +85,6 @@ class SpanishCitizenshipService:
             self.driver.quit()
             self.driver = None
 
-
 def ensure_debug_folder_exists():
     """
     Ensures a debug folder exists in the root directory and returns its path

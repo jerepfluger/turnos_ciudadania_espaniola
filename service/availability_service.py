@@ -1,9 +1,12 @@
+import json
 import os
 import time
 from datetime import datetime
+from os import environ as env
+
+from dotenv import load_dotenv
 
 from config.config import settings as config_file
-from constants.notifications.common import TELEGRAM
 from helpers.decorators import retry_on_exceptions
 from helpers.logger import logger
 from helpers.webdriver.find_element import find_element_by_xpath_and_click_it_with_javascript, \
@@ -11,6 +14,9 @@ from helpers.webdriver.find_element import find_element_by_xpath_and_click_it_wi
 from helpers.webdriver.waits import wait_presence_of_element_located
 from service.notifications_service import NotificationsService
 from webdrivers.webdriver import WebDriver
+
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(os.path.dirname(ROOT_PATH), '.env'))
 
 
 class SpanishCitizenshipService:
@@ -58,9 +64,7 @@ class SpanishCitizenshipService:
             return
 
         logger.info('Apparently there are available services. Notifying on Telegram')
-        NotificationsService().post_notification(TELEGRAM, "@jerepfluger aparentemente hay turnos")
-        NotificationsService().post_notification(TELEGRAM, "@+34645692096 aparentemente hay turnos")
-        NotificationsService().post_notification(TELEGRAM, "@+376620214 aparentemente hay turnos")
+        self.notify_users_of_appointments_availability()
 
         logger.info('Saving screenshot and html_source code')
         self.save_screenshot_and_html_source_code()
@@ -81,6 +85,7 @@ class SpanishCitizenshipService:
             self.driver.quit()
             self.driver = None
 
+
 def ensure_debug_folder_exists():
     """
     Ensures a debug folder exists in the root directory and returns its path
@@ -94,3 +99,15 @@ def ensure_debug_folder_exists():
     os.makedirs(debug_dir, exist_ok=True)
 
     return debug_dir
+
+
+def notify_users_of_appointments_availability():
+    logger.info('Starting users notification process')
+    enabled_users = os.getenv('ENABLED_USERS', '') or env.get('ENABLED_USERS', '')
+    enabled_users = json.loads(enabled_users)
+    for user in enabled_users:
+        try:
+            tag = os.getenv(f'{user.upper()}_TAG', '') or env.get(f'{user.upper()}_TAG', '')
+            NotificationsService().post_notification(user, tag)
+        except Exception as ex:
+            logger.error(ex)

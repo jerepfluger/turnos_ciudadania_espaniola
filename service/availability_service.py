@@ -64,7 +64,7 @@ class SpanishCitizenshipService:
             return
 
         logger.info('Apparently there are available services. Notifying on Telegram')
-        self.notify_users_of_appointments_availability()
+        notify_users_of_appointments_availability()
 
         logger.info('Saving screenshot and html_source code')
         self.save_screenshot_and_html_source_code()

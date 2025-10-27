@@ -11,7 +11,7 @@ import uuid
 from logging import LoggerAdapter
 from time import gmtime
 
-from cloghandler import ConcurrentRotatingFileHandler
+from concurrent_log_handler import ConcurrentRotatingFileHandler
 
 from config.config import settings
 

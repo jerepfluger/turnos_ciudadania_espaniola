@@ -40,34 +40,34 @@ class SpanishCitizenshipService:
         self.driver = WebDriver().acquire(self.config.browser_type)
 
     def check_availability(self):
-        logger.info('Navigating to embassy webpage')
-        self.driver.get(self.config.base_url)
-        wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'DeltaSPWebPartManager')
-
-        logger.info('Page loaded. Click on AQUI button to check availability process')
-        find_element_by_xpath_and_click_it_with_javascript(self.driver, './/*[contains(text(), "AQUÍ")]')
-
-        logger.info('Waiting 15 seconds to accept popup')
-        time.sleep(15)
-        self.driver.switch_to.alert.accept()
-
-        logger.info('Waiting for appointments page to be fully loaded')
-        wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idCaptchaButton')
-        find_element_by_id_and_click_it_with_javascript(self.driver, 'idCaptchaButton')
-
-        time.sleep(15)
-        wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idListServices')
-        logger.info('Checking if there\'s any available service')
-        services_list = find_element(self.driver, 'ID', 'idListServices')
-        if not services_list.text:
-            logger.info('No available appointments found')
-            return
+        # logger.info('Navigating to embassy webpage')
+        # self.driver.get(self.config.base_url)
+        # wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'DeltaSPWebPartManager')
+        #
+        # logger.info('Page loaded. Click on AQUI button to check availability process')
+        # find_element_by_xpath_and_click_it_with_javascript(self.driver, './/*[contains(text(), "AQUÍ")]')
+        #
+        # logger.info('Waiting 15 seconds to accept popup')
+        # time.sleep(15)
+        # self.driver.switch_to.alert.accept()
+        #
+        # logger.info('Waiting for appointments page to be fully loaded')
+        # wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idCaptchaButton')
+        # find_element_by_id_and_click_it_with_javascript(self.driver, 'idCaptchaButton')
+        #
+        # time.sleep(15)
+        # wait_presence_of_element_located(self.driver, self.config.wait_timeout, 'ID', 'idListServices')
+        # logger.info('Checking if there\'s any available service')
+        # services_list = find_element(self.driver, 'ID', 'idListServices')
+        # if not services_list.text:
+        #     logger.info('No available appointments found')
+        #     return
 
         logger.info('Apparently there are available services. Notifying on Telegram')
         notify_users_of_appointments_availability()
 
-        logger.info('Saving screenshot and html_source code')
-        self.save_screenshot_and_html_source_code()
+        # logger.info('Saving screenshot and html_source code')
+        # self.save_screenshot_and_html_source_code()
 
     def save_screenshot_and_html_source_code(self):
         debug_dir = ensure_debug_folder_exists()
@@ -102,11 +102,14 @@ def ensure_debug_folder_exists():
 
 def notify_users_of_appointments_availability():
     logger.info('Starting users notification process')
-    enabled_users = os.getenv('ENABLED_USERS', '') or env.get('ENABLED_USERS', '')
-    enabled_users = json.loads(enabled_users)
-    for user in enabled_users:
-        try:
-            tag = os.getenv(f'{user.upper()}_TAG', '') or env.get(f'{user.upper()}_TAG', '')
-            NotificationsService().post_notification(user, f"{tag} Hay nuevos turnos para la ciudadania! Rápido! https://www.exteriores.gob.es/Consulados/cordoba/es/Comunicacion/Noticias/Paginas/Articulos/Instrucciones-para-solicitar-cita-previa-para-LMD.aspx")
-        except Exception as ex:
-            logger.error(ex)
+    try:
+        enabled_users = os.getenv('ENABLED_USERS', '') or env.get('ENABLED_USERS', '')
+        logger.info(f"enabled_users: {enabled_users}")
+        enabled_users = json.loads(enabled_users)
+        logger.info(f"enabled_users: {enabled_users}")
+        for user in enabled_users:
+                tag = os.getenv(f'{user.upper()}_TAG', '') or env.get(f'{user.upper()}_TAG', '')
+                logger.info(f"User: {user}, Tag: {tag}")
+                NotificationsService().post_notification(user, f"{tag} Hay nuevos turnos para la ciudadania! Rápido! https://www.exteriores.gob.es/Consulados/cordoba/es/Comunicacion/Noticias/Paginas/Articulos/Instrucciones-para-solicitar-cita-previa-para-LMD.aspx")
+    except Exception as ex:
+        logger.error(ex)
